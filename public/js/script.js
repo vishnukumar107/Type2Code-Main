@@ -1,4 +1,4 @@
-
+const paragraph="As the name suggests uses objects in programming. Object-oriented programming aims to implement real-world entities like inheritance, hiding, polymorphism, etc in programming. The main aim of OOP is to bind together the data and the functions that operate on them so that no other part of the code can access this data except that function."
 const randomUrl="http://api.quotable.io/random";
 const quoteDisplay=document.getElementById("quoteDisplay");
 const quoteInput=document.getElementById("quoteInput");
@@ -6,18 +6,48 @@ const timer=document.getElementById("countDownTimer")
 const refresh =document.getElementById("refresh");
 const scoreBoard=document.getElementById("scoreBoard");
 const chart=document.getElementById("myChart");
+const cpp=document.getElementById("cpp");
+const basic=document.getElementById("basic");
 
 //global varibales
-let interval,startTime,needToStart,characterTyped,totalError,error;
+let interval,startTime,needToStart,characterTyped,totalError,error,para;
 
-//Function which changes the text colour
-quoteInput.addEventListener('input',()=>{
+let=displaypara=()=>{
+    quoteDisplay.innerHTML=''
+    paragraph.split('').forEach(element => {
+            const characterSpan = document.createElement('span');
+            characterSpan.innerText=element;
+            quoteDisplay.appendChild(characterSpan);
+    });
     const quoteArray=quoteDisplay.querySelectorAll('span');
-    const inputArray=quoteInput.value.split('');
+    quoteArray[0].classList.add('highlight');
+    quoteArray[0].setAttribute("id","scroll-view");
+    const scorllView=document.getElementById('scroll-view');
+    scorllView.scrollIntoView(true);
+    quoteArray[0].removeAttribute("id");
+}
+
+let colorDisplay=(inputArray)=>{
     characterTyped++;
+    const quoteArray=quoteDisplay.querySelectorAll('span');
+    if(quoteArray.length===0){
+        return;
+    }
+    if(inputArray.length>=1){
+    quoteArray[inputArray.length-1].classList.remove('highlight');
+    }
+    quoteArray[inputArray.length+1].classList.remove('highlight');
+    quoteArray[inputArray.length].classList.add('highlight');
+    if(inputArray.length>=1){
+        quoteArray[inputArray.length-1].removeAttribute("id");
+    }
+    quoteArray[inputArray.length].setAttribute("id","scroll-view");
+    const scorllView=document.getElementById('scroll-view');
+    scorllView.scrollIntoView(true);
+    inputArray=inputArray.split('');
     if(quoteArray.length===inputArray.length){
-        displayQuote();
-        totalError+=error;
+        para='';
+        displaypara();
     }
     error=0;
     quoteArray.forEach((characterQuote,index)=>{
@@ -36,14 +66,30 @@ quoteInput.addEventListener('input',()=>{
             error++;
         }
     });
-});
-//function to get quote
-let getQuote=()=>{
-    return fetch(randomUrl)
-    .then(response=>response.json())
-    .then(data=>data.content)
+    totalError=error;
 }
-
+let quote=(e)=>{
+    if(e.keyCode == 32) {
+        e.preventDefault();
+    }
+    if(e.keyCode==8){
+       // console.log('backspace is hit');
+       e.preventDefault();
+        para=para.slice(0,-1);
+    }
+    else{
+    let value = String.fromCharCode(e.keyCode);
+    para=para+value;
+    }
+    //console.log(para);
+    colorDisplay(para);
+}
+quoteDisplay.addEventListener('keypress',(e)=>quote(e))
+quoteDisplay.addEventListener('keydown',(e)=>{
+    if(e.keyCode==8){
+        quote(e);
+    }
+})
 //Function to calculate time
 let convertToSeconds=(sec)=>{
     let min=Math.floor(sec/60);
@@ -89,29 +135,18 @@ let startTimer=(sec)=>{
         if(sec<=newTime){
             clearInterval(interval);
             quoteDisplay.innerHTML=null;
-            quoteInput.value=null;
             totalError+=error;
             giveScore();
+            //quoteDisplay.removeAttribute("tabindex");
         }
 
     }
     interval=setInterval(timeIt,1000);
 }
 
-//function which displays quote
-async function displayQuote(){
-    const quote=await getQuote();
-    //console.log(quote)
-    quoteDisplay.innerHTML=''
-    quote.split('').forEach(element => {
-        const characterSpan = document.createElement('span');
-        characterSpan.innerText=element;
-        quoteDisplay.appendChild(characterSpan);
-    });
-    quoteInput.value=null;
-    //startTimer(60); 
-}
 let setVariables=()=>{
+    //quoteDisplay.setAttribute("tabindex","1");
+    para='';
     characterTyped=0;
     totalError=0;
     timer.innerHTML='01:00'
@@ -121,14 +156,14 @@ let setVariables=()=>{
 }
 let startProcess=()=>{
     if(needToStart){
-    startTimer(80);
+    startTimer(6);
     needToStart=false;
     }
     //console.log("clicked inside")
 }
 let startFunction=()=>{
     setVariables();
-    displayQuote();
+    displaypara();
 }
 
 refresh.addEventListener('click',()=>{
@@ -136,8 +171,15 @@ refresh.addEventListener('click',()=>{
     startFunction();
 })
 
-quoteInput.addEventListener('click',()=>{
+quoteDisplay.addEventListener('click',()=>{
     startProcess();
 });
-
+cpp.addEventListener('click',()=>{
+    clearInterval(interval);
+    console.log('cpp');
+})
+basic.addEventListener('click',()=>{
+    clearInterval(interval);
+    console.log('basic');
+})
 startFunction();

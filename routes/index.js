@@ -18,7 +18,6 @@ router.get('/',(req,res)=>{
         name:name
     })
 });
-
 router.use(express.json({limit:'1mb'}))
 
 //Dashboard

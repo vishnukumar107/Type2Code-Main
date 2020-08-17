@@ -35,7 +35,7 @@
               </nav>
         </div>
     </header>
-    <div class="container">
+    <div class="container main-block">
       <% if(success_msg !=''){%>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <%= success_msg%>
@@ -44,11 +44,11 @@
             </button>
           </div>
     <%}%>
-      <div class="quote-display noselect" id="quoteDisplay"></div>
-      <textarea id="quoteInput" class="quote-input"></textarea>
+    <div class="quote-display noselect" id="quoteDisplay" tabindex="1"></div>
       <button type="button" class="btn btn-primary Timer"><h3 id="countDownTimer">01:00</h3></button>
       <button type="button" class="btn btn-primary float-right refreshButton"id="refresh"><i class="fa fa-refresh refresh"></i></button>
-      <button type="button" class="btn btn-primary">c++</button>
+      <button class="btn btn-primary changer"id="cpp">c++</button>
+      <button class="btn btn-primary changer"id="basic">basic</button>
     </div>
     <div class="container score-Display" id="scoreBoard">
       <table class="table table-striped">
