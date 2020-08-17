@@ -1,0 +1,76 @@
+    <header class="header-area">
+        <div class="main-menu">
+            <nav class="navbar navbar-expand-lg navbar-light" >
+                <a class="navbar-brand" href="#"><img src="img/logo.png"style="width100px;height:61px;"alt="TypeToCode"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <div class="mr-auto"></div>
+                  <ul class="navbar-nav mr-auto">
+                    <%if(typeof logged == 'undefined'){%>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary btn-sm Timer" href="/users/register" role="button">Register</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link btn btn-primary btn-sm Timer" href="/users/login" role="button">Login</a>
+                    </li>
+                    <%}%>
+                    <%if(typeof logged != 'undefined'){%>
+                      <li class="nav-item">
+                        <a class="nav-link btn btn-primary btn-sm Timer" href="/users/logout" role="button">Logout</a>
+                    </li>
+                      <%}%>
+                    <li class="nav-item">
+                      <a class="nav-link btn btn-primary btn-sm Timer" href="/scoreboard" role="button">ViewScore</a>
+                    </li>
+                  </ul>
+                  <%if(typeof logged == 'undefined'){%>
+                  <div><a href='/'class="Name">Hi, User </a></div>
+                  <%}%>
+                  <%if(typeof logged != 'undefined'){%>
+                    <div><a href='/'class="Name">Hi, <%=name%>  </a></div>
+                    <%}%>
+                </div>
+              </nav>
+        </div>
+    </header>
+    <div class="container">
+      <% if(success_msg !=''){%>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= success_msg%>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+    <%}%>
+      <div class="quote-display noselect" id="quoteDisplay"></div>
+      <textarea id="quoteInput" class="quote-input"></textarea>
+      <button type="button" class="btn btn-primary Timer"><h3 id="countDownTimer">01:00</h3></button>
+      <button type="button" class="btn btn-primary float-right refreshButton"id="refresh"><i class="fa fa-refresh refresh"></i></button>
+      <button type="button" class="btn btn-primary">c++</button>
+    </div>
+    <div class="container score-Display" id="scoreBoard">
+      <table class="table table-striped">
+        <tbody>
+          <tr ><p style="text-align:center;">RESULT</p></tr>
+          <tr>
+            <th scope="row">Accuracy</th>
+            <td id="accuracy">0%</td>
+          </tr>
+          <tr>
+            <th scope="row">CPM</th>
+            <td id="cpm">0</td>
+          </tr>
+          <tr>
+            <th scope="row">WPM</th>
+            <td id="wpm">0</td>
+          </tr>
+          <tr>
+            <th scope="row">Errors</th>
+            <td id="errors">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script src="js/script.js"></script>
