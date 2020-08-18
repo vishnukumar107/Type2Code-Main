@@ -1,4 +1,5 @@
 const paragraph="As the name suggests uses objects in programming. Object-oriented programming aims to implement real-world entities like inheritance, hiding, polymorphism, etc in programming. The main aim of OOP is to bind together the data and the functions that operate on them so that no other part of the code can access this data except that function."
+const paragraphcpp=["int search(int arr[], int n, int x)","{","int i","for (i = 0; i < n; i++)","if (arr[i] == x)","return i;","return -1;","}"];
 const randomUrl="http://api.quotable.io/random";
 const quoteDisplay=document.getElementById("quoteDisplay");
 const quoteInput=document.getElementById("quoteInput");
@@ -10,7 +11,7 @@ const cpp=document.getElementById("cpp");
 const basic=document.getElementById("basic");
 
 //global varibales
-let interval,startTime,needToStart,characterTyped,totalError,error,para;
+let interval,startTime,needToStart,characterTyped,totalError,error,para,cppbasic;
 
 let=displaypara=()=>{
     quoteDisplay.innerHTML=''
@@ -25,6 +26,18 @@ let=displaypara=()=>{
     const scorllView=document.getElementById('scroll-view');
     scorllView.scrollIntoView(true);
     quoteArray[0].removeAttribute("id");
+}
+let =displaycpppara=()=>{
+    quoteDisplay.innerHTML='';
+    paragraphcpp.forEach((paragraph,index)=>{
+        paragraph.split('').forEach(element => {
+            const characterSpan = document.createElement('span');
+            characterSpan.innerText=element;
+            quoteDisplay.appendChild(characterSpan);
+    });
+    let br=document.createElement('br');
+    quoteDisplay.appendChild(br);
+    })
 }
 
 let colorDisplay=(inputArray)=>{
@@ -120,7 +133,7 @@ let giveScore=()=>{
     document.getElementById("cpm").innerHTML=cpm;
     document.getElementById("wpm").innerHTML=wpm;
     document.getElementById("accuracy").innerHTML=`${Math.round(accuracy)}%`;
-    postData('/api', { score: wpm })
+    postData('/api', { score: wpm,cppbasic:cppbasic })
         .then(data => {console.log(data);})
         .catch(err=>console.log('The user is not logged in'))
 
@@ -156,19 +169,34 @@ let setVariables=()=>{
 }
 let startProcess=()=>{
     if(needToStart){
-    startTimer(6);
+    startTimer(60);
     needToStart=false;
     }
     //console.log("clicked inside")
 }
-let startFunction=()=>{
+let startFunctionCpp=()=>{
+    cppbasic=1;
+    cpp.style.display="none";
+    basic.style.display='';
+    setVariables();
+    displaycpppara();
+}
+let startFunctionBasic=()=>{
+    cppbasic=0;
+    basic.style.display="none";
+    cpp.style.display='';
     setVariables();
     displaypara();
 }
 
 refresh.addEventListener('click',()=>{
     clearInterval(interval);
-    startFunction();
+    if(cppbasic===0){
+        startFunctionBasic();
+    }
+    else{
+        startFunctionCpp();
+    }
 })
 
 quoteDisplay.addEventListener('click',()=>{
@@ -176,10 +204,12 @@ quoteDisplay.addEventListener('click',()=>{
 });
 cpp.addEventListener('click',()=>{
     clearInterval(interval);
+    startFunctionCpp();
     console.log('cpp');
 })
 basic.addEventListener('click',()=>{
     clearInterval(interval);
+    startFunctionBasic();
     console.log('basic');
 })
-startFunction();
+startFunctionBasic();

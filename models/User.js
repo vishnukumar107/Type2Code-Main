@@ -24,6 +24,14 @@ const UserSchema =new mongoose.Schema({
     highScore:{
         type:Number,
         default:0
+    },
+    scorecpp:{
+        type:Array,
+        default:[]
+    },
+    highScorecpp:{
+        type:Number,
+        default:0
     }
 });
 

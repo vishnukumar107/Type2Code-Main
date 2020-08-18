@@ -25,7 +25,8 @@ router.get('/scoreboard',ensureAuthenticated,(req,res)=>{
     res.render('scoreboard',{
         name:req.user.name,
         score:req.user.score,
-        highScore:req.user.highScore
+        highScore:req.user.highScore,
+        highScorecpp:req.user.highScorecpp
     })
     
 })
@@ -34,21 +35,34 @@ router.post('/api',ensureAuthenticated,(req,res)=>{
         status:'success'
     });
     let score=req.body.score;
+    let cppbasic=req.body.cppbasic;
     let email=req.user.email;
     console.log(email);
     User.findOne({email:email})
         .then(user=>{
-            if(user.highScore<score){
-                user.highScore=score
+            if(cppbasic===0){
+                if(user.highScore<score){
+                    user.highScore=score
+                }
+                if(user.score.length>=30){
+                    user.score.shift();
+                }
+                user.score.push(score);
+                user.save()
+                    .then(user=>console.log(user))
+                    .catch(res.status(500).send())
+            }else{
+                if(user.highScorecpp<score){
+                    user.highScorecpp=score
+                }
+                if(user.scorecpp.length>=30){
+                    user.scorecpp.shift();
+                }
+                user.scorecpp.push(score);
+                user.save()
+                    .then(user=>console.log(user))
+                    .catch(res.status(500).send())
             }
-            if(user.score.length>=30){
-                user.score.shift();
-            }
-            user.score.push(score);
-            console.log(user);
-            user.save()
-                .then(user=>console.log(user))
-                .catch(res.status(500).send())
         })
         .catch(err=>console.log(err));
 })
@@ -56,7 +70,8 @@ router.post('/api',ensureAuthenticated,(req,res)=>{
 router.get('/score',(req,res)=>{
     res.json({
         status:'success',
-        score:req.user.score
+        score:req.user.score,
+        scorecpp:req.user.scorecpp
     });
 })
 
