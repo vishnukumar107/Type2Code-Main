@@ -1,6 +1,3 @@
-const paragraph="As the name suggests uses objects in programming. Object-oriented programming aims to implement real-world entities like inheritance, hiding, polymorphism, etc in programming. The main aim of OOP is to bind together the data and the functions that operate on them so that no other part of the code can access this data except that function."
-const paragraphcpp=["int search(int arr[], int n, int x)","{","int i","for (i = 0; i < n; i++)","if (arr[i] == x)","return i;","return -1;","}"];
-const randomUrl="http://api.quotable.io/random";
 const quoteDisplay=document.getElementById("quoteDisplay");
 const quoteInput=document.getElementById("quoteInput");
 const timer=document.getElementById("countDownTimer")
@@ -13,7 +10,18 @@ const basic=document.getElementById("basic");
 //global varibales
 let interval,startTime,needToStart,characterTyped,totalError,error,para,cppbasic;
 
-let=displaypara=()=>{
+let getparabasic=()=>{
+    return fetch('/basic')
+    .then(response=>response.json())
+    .then(data=>data.para)
+}
+let getparacpp=()=>{
+    return fetch('/cpp')
+    .then(response=>response.json())
+    .then(data=>data.para)
+}
+async function displaypara(){
+    const paragraph=await getparabasic();
     quoteDisplay.innerHTML=''
     paragraph.split('').forEach(element => {
             const characterSpan = document.createElement('span');
@@ -27,7 +35,8 @@ let=displaypara=()=>{
     scorllView.scrollIntoView(true);
     quoteArray[0].removeAttribute("id");
 }
-let =displaycpppara=()=>{
+async function displaycpppara(){
+    const paragraphcpp=await getparacpp();
     quoteDisplay.innerHTML='';
     paragraphcpp.forEach((paragraph,index)=>{
         paragraph.split('').forEach(element => {
@@ -35,9 +44,19 @@ let =displaycpppara=()=>{
             characterSpan.innerText=element;
             quoteDisplay.appendChild(characterSpan);
     });
+    let span=document.createElement('span');
+    span.classList.add("enter");
+    span.innerText=" ";
+    quoteDisplay.appendChild(span);
     let br=document.createElement('br');
     quoteDisplay.appendChild(br);
     })
+    const quoteArray=quoteDisplay.querySelectorAll('span');
+    quoteArray[0].classList.add('highlight');
+    quoteArray[0].setAttribute("id","scroll-view");
+    const scorllView=document.getElementById('scroll-view');
+    scorllView.scrollIntoView(true);
+    quoteArray[0].removeAttribute("id");
 }
 
 let colorDisplay=(inputArray)=>{
@@ -59,8 +78,8 @@ let colorDisplay=(inputArray)=>{
     scorllView.scrollIntoView(true);
     inputArray=inputArray.split('');
     if(quoteArray.length===inputArray.length){
-        para='';
-        displaypara();
+        //para='';
+        //displaypara();
     }
     error=0;
     quoteArray.forEach((characterQuote,index)=>{
@@ -73,6 +92,12 @@ let colorDisplay=(inputArray)=>{
             characterQuote.classList.add('correct');
             characterQuote.classList.remove('incorrect');
         }
+        else if(characterQuote.classList.contains('enter')){
+            if(character!=' '){
+                error++;
+            }
+            //console.log('enter class')
+        }
         else{
             characterQuote.classList.add('incorrect');
             characterQuote.classList.remove('correct');
@@ -82,6 +107,7 @@ let colorDisplay=(inputArray)=>{
     totalError=error;
 }
 let quote=(e)=>{
+    
     if(e.keyCode == 32) {
         e.preventDefault();
     }
@@ -89,6 +115,11 @@ let quote=(e)=>{
        // console.log('backspace is hit');
        e.preventDefault();
         para=para.slice(0,-1);
+    }
+    else if(e.keyCode==13){
+        para=para+" ";
+        //console.log('enter key');
+
     }
     else{
     let value = String.fromCharCode(e.keyCode);
@@ -113,7 +144,6 @@ let convertToSeconds=(sec)=>{
     return min+":"+sec;
 }
 async function postData(url = '', data = {}) {
-    console.log(data);
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -137,7 +167,8 @@ let giveScore=()=>{
         .then(data => {console.log(data);})
         .catch(err=>console.log('The user is not logged in'))
 
-    console.log(characterTyped);
+    //console.log(characterTyped);
+    scoreBoard.scrollIntoView(true);
 }
 let startTimer=(sec)=>{
     startTime=new Date();
@@ -148,7 +179,6 @@ let startTimer=(sec)=>{
         if(sec<=newTime){
             clearInterval(interval);
             quoteDisplay.innerHTML=null;
-            totalError+=error;
             giveScore();
             //quoteDisplay.removeAttribute("tabindex");
         }
@@ -205,11 +235,9 @@ quoteDisplay.addEventListener('click',()=>{
 cpp.addEventListener('click',()=>{
     clearInterval(interval);
     startFunctionCpp();
-    console.log('cpp');
 })
 basic.addEventListener('click',()=>{
     clearInterval(interval);
     startFunctionBasic();
-    console.log('basic');
 })
 startFunctionBasic();

@@ -35,8 +35,6 @@ async function displayScore(chart,score){
 }
 async function storeScores(){
     let [score,scorecpp]=await getScore();
-    console.log(score);
-    console.log(scorecpp);
     displayScore(ctx,score);
     displayScore(ctxcpp,scorecpp);
 }

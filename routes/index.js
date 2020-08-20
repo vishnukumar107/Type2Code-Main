@@ -5,6 +5,8 @@ const router=express.Router();
 //User model
 const User =require('../models/User');
 
+const para=require('./words')
+
 const {ensureAuthenticated}=require('../config/auth')
 
 router.get('/',(req,res)=>{
@@ -30,6 +32,22 @@ router.get('/scoreboard',ensureAuthenticated,(req,res)=>{
     })
     
 })
+
+router.get('/basic',(req,res)=>{
+    let num=Math.floor(Math.random() * 10);
+    res.json({
+        status:'success',
+        para:para.paragraph[num]
+    });
+})
+router.get('/cpp',(req,res)=>{
+    let num=Math.floor(Math.random() * 5);
+    res.json({
+        status:'success',
+        para:para.paragraphcpp[num]
+    });
+})
+
 router.post('/api',ensureAuthenticated,(req,res)=>{
     res.json({
         status:'success'
@@ -37,7 +55,7 @@ router.post('/api',ensureAuthenticated,(req,res)=>{
     let score=req.body.score;
     let cppbasic=req.body.cppbasic;
     let email=req.user.email;
-    console.log(email);
+    //console.log(email);
     User.findOne({email:email})
         .then(user=>{
             if(cppbasic===0){

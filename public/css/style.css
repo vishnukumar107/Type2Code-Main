@@ -46,15 +46,19 @@ li {
   height:300px
 }
 .score-Display{
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 600px;
+}
+.scoreboardDisplay{
     background-color:white;
     border: 2px solid white;
     padding: 1rem;
     border-radius: .5rem;
-    max-width: 40%;
     font-size: xx-large;
     letter-spacing: 0.1rem;
-    margin:40px 40px 40px 40px;
-    width: 400px;
+    margin:10px 10px 10px 10px;
+    max-width: 90%;
 }
 .reduce-size{
   margin-top:20px;
